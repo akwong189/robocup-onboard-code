@@ -16,11 +16,14 @@
 
 robotVals *r;
 
+// Thread for preparation to move the robot when r's id changes
 void* StartMove(void* vargp) {
-    int prevRobotId = r->id;
+    int prevRobotId = -1;
+    printf("\tThread is on! ... \n");
     while(1) {
         if(prevRobotId != r->id) {
-            printf("Changing directions ...\n");
+            printf("\tChanging directions ...");
+            printf("%f %f %f 0x%02x 0x%08x\n", r->dx, r->dy, r->angle, r->flags, r->id);
             prevRobotId = r->id;
         }
     }
@@ -38,7 +41,6 @@ int main() {
     
     printf("Starting client ...\n");
     r = calloc(1, sizeof(robotVals));
-    r->id = -1;
     check(sockfd = socket(AF_INET, SOCK_DGRAM, 0));
     printf("Finished checks ...\n");
 
@@ -102,7 +104,7 @@ void parse(int* buffer, robotVals **r) {
     tempR->flags = (uint8_t) getValuesFromInt(0, sizeof(uint8_t), buffer[3]);
     tempR->id = (uint16_t) getValuesFromInt(8, sizeof(uint16_t), buffer[3]);
 
-    // printf("%f %f %f 0x%02x 0x%08x\n", tempR->dx, tempR->dy, tempR->angle, tempR->flags, tempR->id);
+    printf("%f %f %f 0x%02x 0x%08x\n", tempR->dx, tempR->dy, tempR->angle, tempR->flags, tempR->id);
 
     if(tempR->id > (*r)->id || (*r)->id == 0)
         *r = tempR;
