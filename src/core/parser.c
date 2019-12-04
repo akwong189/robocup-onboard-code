@@ -97,12 +97,12 @@ void parse(int* buffer, robotVals **r) {
     robotVals *tempR;
     checkPointer(tempR = calloc(1, sizeof(robotVals)));
 
-    tempR->dx = buffer[0];
-    tempR->dy = buffer[1];
-    tempR->angle = buffer[2];
+    tempR->dx = buffer[1];
+    tempR->dy = buffer[2];
+    tempR->angle = buffer[3];
 
-    tempR->flags = (uint8_t) getValuesFromInt(0, sizeof(uint8_t), buffer[3]);
-    tempR->id = (uint16_t) getValuesFromInt(8, sizeof(uint16_t), buffer[3]);
+    tempR->flags = (uint8_t) getValuesFromInt(0, sizeof(uint8_t), buffer[4]);
+    tempR->id = (uint16_t) getValuesFromInt(8, sizeof(uint16_t), buffer[4]);
 
     printf("%f %f %f 0x%02x 0x%08x\n", tempR->dx, tempR->dy, tempR->angle, tempR->flags, tempR->id);
 

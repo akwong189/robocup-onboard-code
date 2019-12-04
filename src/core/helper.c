@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
+
 #include "helper.h"
 
 void check(int errNum) {
@@ -21,4 +23,8 @@ void checkPointer(void* ptr) {
 int getValuesFromInt(int removeFront, int removeEnd, int value) {
     value = value << removeFront;
     return value >> (sizeof(value) - removeEnd) * 8;
+}
+
+int getAbs(int num) {
+    return abs(num);
 }

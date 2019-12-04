@@ -7,6 +7,10 @@
         float dx;
         float dy;
         float angle;
+        float vx;
+        float vy;
+        float da;
+        float w;
         uint8_t flags;
         uint16_t id;
     } robotVals;
