@@ -75,23 +75,25 @@ int main() {
         if(n < 0)
             continue;
         printf("Input received, parsing ...\n");
-        printBuffer(buffer);
+        _printBuffer(buffer);
         parse(buffer, &r);
         printf("%f %f %f 0x%02x %d\n", r->dx, r->dy, r->angle, r->flags, r->id);
     }
 
-    // if it quits, free up the space and quit
+    // if it quits, free the space in heap and quit
     free(r);
     return 0;
 }
 
-void printBuffer(int* buffer) {
+// helper code
+void _printBuffer(int* buffer) {
     int i;
     for(i = 0; i < 3; i++)
         printf("%d ", buffer[i]);
     printf("0x%08x\n", buffer[3]);
 }
 
+//Parsing code for buffered input from server
 void parse(int* buffer, robotVals **r) {
     int i;
     robotVals *tempR;
@@ -99,13 +101,17 @@ void parse(int* buffer, robotVals **r) {
 
     tempR->dx = buffer[1];
     tempR->dy = buffer[2];
-    tempR->angle = buffer[3];
+    tempR->vx = buffer[3];
+    tempR->vy = buffer[4];
+    tempR->angle = buffer[5];
+    tempR->w = buffer[6];
 
-    tempR->flags = (uint8_t) getValuesFromInt(0, sizeof(uint8_t), buffer[4]);
-    tempR->id = (uint16_t) getValuesFromInt(8, sizeof(uint16_t), buffer[4]);
+    tempR->flags = (uint8_t) getValuesFromInt(0, sizeof(uint8_t), buffer[7]);
+    tempR->id = (uint16_t) getValuesFromInt(8, sizeof(uint16_t), buffer[7]);
 
     printf("%f %f %f 0x%02x 0x%08x\n", tempR->dx, tempR->dy, tempR->angle, tempR->flags, tempR->id);
 
+    // checks unique id to determine if this command is the newest output
     if(tempR->id > (*r)->id || (*r)->id == 0)
         *r = tempR;
 }
